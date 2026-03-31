@@ -1,0 +1,28 @@
+.DS_Store
+
+# Terraform
+**/.terraform/
+**/*.tfstate
+**/*.tfstate.*
+**/crash.log
+**/override.tf
+**/override.tf.json
+**/*_override.tf
+**/*_override.tf.json
+
+# Local variable files
+**/terraform.tfvars
+**/*.auto.tfvars
+**/*.auto.tfvars.json
+
+# Generated artifacts
+scripts/generated/
+infra/script/terraform.tfstate
+
+# Secrets and keys
+*.pem
+*.key
+*.crt
+id_rsa
+id_rsa.pub
+

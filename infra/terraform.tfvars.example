@@ -1,0 +1,87 @@
+pm_api_url          = "https://proxmox.example.internal:8006/api2/json"
+pm_user             = "root@pam"
+pm_api_token_id     = "root@pam!terraform"
+pm_api_token_secret = "REPLACE_ME"
+pm_tls_insecure     = true
+
+target_node   = "pve-node-1"
+pool          = "terraform"
+template_vmid = 1000
+template_name = "ubuntu-base-template"
+
+storage           = "local-lvm"
+cloudinit_storage = "local-lvm"
+bridge            = "vmbr0"
+
+cidr       = 24
+gateway    = "x.x.x.1"
+nameserver = "1.1.1.1"
+
+ci_user       = "devops"
+ci_password   = "REPLACE_ME"
+ci_user_snippet = ""
+ssh_public_keys = [
+  "ssh-ed25519 REPLACE_ME terraform@example"
+]
+
+cloudflare_api_token = "REPLACE_ME"
+cloudflare_zone_id   = "REPLACE_ME"
+domain_storage       = "storage.example.com"
+domain_s3            = "s3.example.com"
+lb_ip                = "x.x.x.x"
+le_email             = "ops@example.com"
+run_certbot          = false
+
+vms = [
+  {
+    name           = "sw-master-1"
+    vmid           = 700
+    ip_address     = "x.x.x.x"
+    cores          = 2
+    memory         = 2048
+    os_disk_size   = "32G"
+    data_disk_size = ""
+    role           = "master"
+  },
+  {
+    name           = "sw-filer-1"
+    vmid           = 710
+    ip_address     = "x.x.x.x"
+    cores          = 2
+    memory         = 2048
+    os_disk_size   = "32G"
+    data_disk_size = ""
+    role           = "filer"
+  },
+  {
+    name           = "sw-volume-1"
+    vmid           = 720
+    ip_address     = "x.x.x.x"
+    cores          = 4
+    memory         = 4096
+    os_disk_size   = "32G"
+    data_disk_size = "100G"
+    role           = "volume"
+  },
+  {
+    name           = "sw-postgres-1"
+    vmid           = 730
+    ip_address     = "x.x.x.x"
+    cores          = 2
+    memory         = 4096
+    os_disk_size   = "50G"
+    data_disk_size = ""
+    role           = "postgres"
+  },
+  {
+    name           = "sw-lb-1"
+    vmid           = 740
+    ip_address     = "x.x.x.x"
+    cores          = 2
+    memory         = 2048
+    os_disk_size   = "32G"
+    data_disk_size = ""
+    role           = "lb"
+  }
+]
+
