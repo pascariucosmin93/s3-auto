@@ -112,6 +112,7 @@ variable "template_name" {
 variable "vm_name" {
   type        = string
   description = "Name for the new VM"
+  default     = ""
 }
 
 variable "vmid" {
@@ -180,6 +181,7 @@ variable "bridge" {
 variable "ip_address" {
   type        = string
   description = "Static IP address for the VM"
+  default     = ""
 }
 
 variable "cidr" {
