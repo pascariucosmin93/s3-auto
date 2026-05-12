@@ -11,7 +11,7 @@ DNS="1.1.1.1"
 TEMPLATE_ID=1000
 TEMPLATE_NAME="ubuntu-base-template"
 VM_STORAGE="local-lvm"
-VM_NETWORK_BRIDGE="vnet1"
+VM_NETWORK_BRIDGE="vmbr0"
 SSH_PUBKEY_FILE="${SSH_PUBKEY_FILE:-/root/.ssh/id_rsa.pub}"
 CI_USER="${CI_USER:-root}"
 
@@ -39,29 +39,25 @@ FILER_DIR="/var/lib/seaweedfs/filer"
 MASTER_DEFAULT_REPL="010"
 VOLUME_DC="dc1"
 
-# ===== Domains  =====
+# ===== Domains =====
 DOMAIN_STORAGE=""
 DOMAIN_S3=""
 
 # NOTE: Inventory is auto-loaded from infra/terraform.tfvars via common.sh.
 # Only use the static list below as a generic fallback if tfvars loading fails.
+
 # ===== Inventory: "VMID HOSTNAME LAST_OCTET [rack]" =====
 MASTERS=(
-  "700 sw-master-1 10"
-  "701 sw-master-2 11"
-  "702 sw-master-3 12"
+  "700 node-a1 21"
 )
 
 FILERS=(
-  "710 sw-filer-1 20"
-  "711 sw-filer-2 21"
+  "710 node-b2 22"
 )
 
 VOLUMES=(
-  "720 sw-volume-1 30 rack1"
-  "721 sw-volume-2 31 rack2"
-  "722 sw-volume-3 32 rack3"
+  "720 node-c3 23 rack1"
 )
 
-POSTGRES=("730 sw-postgres-1 40")
-LB=("740 sw-lb-1 50")
+POSTGRES=()
+LB=()
