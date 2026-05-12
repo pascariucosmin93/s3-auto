@@ -107,7 +107,7 @@ vms = [
     cores          = 2
     memory         = 2048
     os_disk_size   = "32G"
-    data_disk_size = ""
+    data_disk_size = "100G"
     role           = "volume"
   }
 ]
