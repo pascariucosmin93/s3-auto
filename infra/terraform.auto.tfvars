@@ -11,13 +11,15 @@ cloudinit_storage = "local-lvm"
 bridge = "vmbr0"
 
 cidr = 24
-gateway = "191.168.1.1"
+gateway = "192.168.1.1"
 nameserver = "1.1.1.1"
 
 ci_user = "root"
 ci_password = ""
 ssh_public_key_file = ""
-ssh_public_keys = []
+ssh_public_keys = [
+  "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILjNs/6x7fGJcea9RmUj+uv8PlXAgSaoSl2n9d3kD27F root@runner-github"
+]
 
 cloudflare_zone_id = ""
 domain_storage = ""
@@ -33,7 +35,7 @@ vms = [
   {
     name           = "node-a1"
     vmid           = 700
-    ip_address     = "191.168.1.21"
+    ip_address     = "192.168.1.21"
     cores          = 2
     memory         = 2048
     os_disk_size   = "32G"
@@ -43,7 +45,7 @@ vms = [
   {
     name           = "node-b2"
     vmid           = 710
-    ip_address     = "191.168.1.22"
+    ip_address     = "192.168.1.22"
     cores          = 2
     memory         = 2048
     os_disk_size   = "32G"
@@ -53,7 +55,7 @@ vms = [
   {
     name           = "node-c3"
     vmid           = 720
-    ip_address     = "191.168.1.23"
+    ip_address     = "192.168.1.23"
     cores          = 4
     memory         = 4096
     os_disk_size   = "32G"
