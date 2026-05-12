@@ -38,6 +38,7 @@ jobs:
       - uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.12.2
+          terraform_wrapper: false
 
       - name: Install runner dependencies
         run: |
@@ -75,14 +76,14 @@ jobs:
           chmod 600 secrets.auto.tfvars
 
       - name: Terraform init
-        run: terraform init
+        run: terraform init -no-color
 
       - name: Terraform validate
-        run: terraform validate
+        run: terraform validate -no-color
 
       - name: Terraform plan
         if: ${{ inputs.action == 'plan' || inputs.action == 'apply' || inputs.action == 'destroy' }}
-        run: terraform plan -out=tfplan
+        run: terraform plan -no-color -out=tfplan
 
       - name: Upload plan artifact
         if: ${{ inputs.action == 'plan' || inputs.action == 'apply' || inputs.action == 'destroy' }}
@@ -93,7 +94,7 @@ jobs:
 
       - name: Terraform apply
         if: ${{ inputs.action == 'apply' }}
-        run: terraform apply -auto-approve tfplan
+        run: terraform apply -no-color -auto-approve tfplan
 
       - name: Verify deployment
         if: ${{ inputs.action == 'apply' || inputs.action == 'verify' }}
@@ -110,4 +111,4 @@ jobs:
 
       - name: Terraform destroy
         if: ${{ inputs.action == 'destroy' && inputs.confirm_destroy == 'destroy' }}
-        run: terraform destroy -auto-approve
+        run: terraform destroy -no-color -auto-approve
