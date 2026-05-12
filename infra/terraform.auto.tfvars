@@ -3,8 +3,8 @@ pm_tls_insecure = false
 
 target_node = "pve"
 pool = "terraform"
-template_vmid = 1000
-template_name = "ubuntu-base-template"
+template_vmid = 102
+template_name = "ubuntu-2404-template"
 
 storage = "local-lvm"
 cloudinit_storage = "local-lvm"
