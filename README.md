@@ -79,15 +79,15 @@ The shell layer handles:
 
 ## Proxmox API Endpoint
 
-For GitHub Actions with a public Proxmox endpoint, prefer:
+For a self-hosted runner inside your network, prefer:
+
+- `pm_api_url = "https://192.168.1.30:8006/api2/json"`
+- `pm_tls_insecure = true`
+
+If you expose a public API endpoint that works correctly with Terraform, you can also use:
 
 - `pm_api_url = "https://proxmox.cosmin-lab.cloud/api2/json"`
 - `pm_tls_insecure = false`
-
-Use `:8006` only when you are targeting the management port directly, for example from an internal runner:
-
-- `pm_api_url = "https://proxmox.example.internal:8006/api2/json"`
-- `pm_tls_insecure = true` only if that endpoint uses a cert you do not trust
 
 ## Sensitive Data Policy
 
@@ -116,13 +116,13 @@ For actual provisioning, use the manual CD workflow in `.github/workflows/deploy
 ### Recommended CI/CD split
 
 - `terraform.yml`: safe CI on GitHub-hosted runners for formatting and validation
-- `deploy.yml`: manual CD on GitHub-hosted runners for `plan`, `apply`, `verify`, `destroy`
+- `deploy.yml`: manual CD on a self-hosted Linux runner for `plan`, `apply`, `verify`, `destroy`
 
-### GitHub-hosted runner requirements
+### Self-hosted runner requirements
 
-- public network access from GitHub Actions to the exact `pm_api_url` used by Terraform
-- public network access from GitHub Actions to the VM subnet if you want `infra/script/verify.sh` and post-clone SSH automation to work
-- if you use the public hostname, set `pm_api_url` to `/api2/json` on `443`, not `:8006`
+- network access to `192.168.1.30:8006`
+- network access to the VM subnet if you want `infra/script/verify.sh` and post-clone SSH automation to work
+- a GitHub Actions runner registered with labels `self-hosted` and `linux`
 - installed commands are handled in the workflow: `jq`, `sshpass`
 
 ### Required GitHub secrets
@@ -133,10 +133,7 @@ For actual provisioning, use the manual CD workflow in `.github/workflows/deploy
 
 Keep non-sensitive Terraform values in your repo-local `.tfvars` file, and inject only credentials through GitHub Secrets.
 
-If your Proxmox API is only reachable on a private IP, or your chosen `pm_api_url` is not reachable from GitHub Actions, GitHub-hosted `apply` will fail. In that case you need either:
-
-- a self-hosted runner inside your network
-- a VPN/tunnel step inside the workflow before `terraform init/plan/apply`
+If your runner is not inside the same network as Proxmox, `apply` will fail against the private IP API endpoint.
 
 ### Manual workflow actions
 
