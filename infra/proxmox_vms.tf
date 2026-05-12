@@ -7,6 +7,7 @@ resource "proxmox_vm_qemu" "vms" {
   clone              = var.template_name != "" ? var.template_name : tostring(var.template_vmid)
   full_clone         = var.full_clone
   start_at_node_boot = var.onboot
+  agent              = 1
 
   cpu {
     cores = each.value.cores

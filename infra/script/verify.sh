@@ -9,29 +9,29 @@ FILER_IP="${NETWORK_PREFIX}.$(echo "${FILERS[0]}" | awk '{print $3}')"
 LB_IP="${LB_IP:-${NETWORK_PREFIX}.$(echo "${LB[0]}" | awk '{print $3}')}"
 
 echo "==> Master cluster status:"
-curl -s "http://${MASTER_IP}:${MASTER_PORT}/cluster/status" | head -c 2000; echo
+curl --connect-timeout 5 --max-time 20 -s "http://${MASTER_IP}:${MASTER_PORT}/cluster/status" | head -c 2000; echo
 echo
 
 echo "==> Volume status (Free/Max):"
-curl -s "http://${MASTER_IP}:${MASTER_PORT}/vol/status" | jq '.Volumes.Free,.Volumes.Max'
+curl --connect-timeout 5 --max-time 20 -s "http://${MASTER_IP}:${MASTER_PORT}/vol/status" | jq '.Volumes.Free,.Volumes.Max'
 echo
 
 echo "==> Filer reachable:"
-curl -s -I "http://${FILER_IP}:${FILER_PORT}/" | head -n 5
+curl --connect-timeout 5 --max-time 20 -s -I "http://${FILER_IP}:${FILER_PORT}/" | head -n 5
 echo
 
 echo "==> S3 reachable (HEAD / gives 405, GET / gives 403 when healthy):"
-curl -s -I "http://${FILER_IP}:${S3_PORT}/" | head -n 5
-curl -s -I "http://${FILER_IP}:${S3_PORT}/" -X GET | head -n 5
+curl --connect-timeout 5 --max-time 20 -s -I "http://${FILER_IP}:${S3_PORT}/" | head -n 5
+curl --connect-timeout 5 --max-time 20 -s -I "http://${FILER_IP}:${S3_PORT}/" -X GET | head -n 5
 echo
 
 echo "==> Upload test via Filer:"
 tmp="$(mktemp)"
 echo "hello seaweed $(date -Is)" > "$tmp"
-curl -s -F "file=@${tmp}" "http://${FILER_IP}:${FILER_PORT}/uploads/test-$(date +%s).txt" >/dev/null
+curl --connect-timeout 5 --max-time 20 -s -F "file=@${tmp}" "http://${FILER_IP}:${FILER_PORT}/uploads/test-$(date +%s).txt" >/dev/null
 echo "OK"
 rm -f "$tmp"
 echo
 
 echo "==> HAProxy stats (if installed):"
-curl -s "http://${LB_IP}:8404/stats" | head -n 5 || true
+curl --connect-timeout 5 --max-time 20 -s "http://${LB_IP}:8404/stats" | head -n 5 || true

@@ -28,7 +28,7 @@ lb_ip = ""
 le_email = ""
 run_certbot = false
 
-run_post_clone_scripts = false
+run_post_clone_scripts = true
 run_haproxy_on_lb_ip_change = false
 
 vms = [
