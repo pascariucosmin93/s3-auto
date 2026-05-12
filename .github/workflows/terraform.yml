@@ -22,7 +22,10 @@ jobs:
           terraform_version: 1.12.2
 
       - name: Terraform fmt
-        run: terraform fmt -check -recursive
+        run: |
+          while IFS= read -r -d '' file; do
+            terraform fmt -check "$file"
+          done < <(find . -type f -name '*.tf' -print0)
 
       - name: Terraform init
         run: terraform init -backend=false
