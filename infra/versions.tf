@@ -5,9 +5,5 @@ terraform {
       source  = "Telmate/proxmox"
       version = "3.0.2-rc07"
     }
-    cloudflare = {
-      source  = "cloudflare/cloudflare"
-      version = ">= 4.0.0"
-    }
   }
 }

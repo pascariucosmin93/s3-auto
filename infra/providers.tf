@@ -6,7 +6,3 @@ provider "proxmox" {
   pm_api_token_secret = var.pm_api_token_secret
   pm_tls_insecure     = var.pm_tls_insecure
 }
-
-provider "cloudflare" {
-  api_token = var.cloudflare_api_token
-}
