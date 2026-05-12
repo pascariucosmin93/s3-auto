@@ -1,6 +1,6 @@
 variable "pm_api_url" {
   type        = string
-  description = "Proxmox API URL, e.g. https://proxmox.example.internal:8006/api2/json"
+  description = "Proxmox API URL, e.g. https://proxmox.cosmin-lab.cloud/api2/json or https://proxmox.example.internal:8006/api2/json"
 }
 
 variable "pm_user" {
@@ -51,30 +51,32 @@ variable "target_node" {
 variable "pool" {
   type        = string
   description = "Proxmox pool for the VMs"
-  default     = "tf"
+  default     = ""
 }
 
 variable "cloudflare_api_token" {
   type        = string
   description = "Cloudflare API token with DNS edit permissions"
+  default     = ""
   sensitive   = true
 }
 
 variable "cloudflare_zone_id" {
   type        = string
   description = "Cloudflare zone ID for the target domain"
+  default     = ""
 }
 
 variable "domain_storage" {
   type        = string
   description = "Domain for filer UI"
-  default     = "storage.example.com"
+  default     = ""
 }
 
 variable "domain_s3" {
   type        = string
   description = "Domain for S3 endpoint"
-  default     = "s3.example.com"
+  default     = ""
 }
 
 variable "lb_ip" {
@@ -92,7 +94,7 @@ variable "le_email" {
 variable "run_certbot" {
   type        = bool
   description = "Run certbot before configuring HAProxy"
-  default     = true
+  default     = false
 }
 
 variable "template_vmid" {
@@ -172,7 +174,7 @@ variable "cloudinit_storage" {
 variable "bridge" {
   type        = string
   description = "Network bridge"
-  default     = "vnet1"
+  default     = "vmbr0"
 }
 
 variable "ip_address" {
@@ -189,19 +191,19 @@ variable "cidr" {
 variable "gateway" {
   type        = string
   description = "Default gateway"
-  default     = "198.51.100.1"
+  default     = "192.168.1.1"
 }
 
 variable "nameserver" {
   type        = string
   description = "DNS nameserver"
-  default     = "9.9.9.9"
+  default     = "8.8.8.8"
 }
 
 variable "ci_user" {
   type        = string
   description = "Cloud-init username"
-  default     = "devops"
+  default     = "root"
 }
 
 variable "ci_password" {

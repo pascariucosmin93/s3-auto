@@ -1,0 +1,103 @@
+name: Terraform CD
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: Terraform action to run
+        required: true
+        default: plan
+        type: choice
+        options:
+          - plan
+          - apply
+          - destroy
+          - verify
+      confirm_destroy:
+        description: Type destroy to allow terraform destroy
+        required: false
+        default: ""
+
+concurrency:
+  group: terraform-cd
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: infra
+    env:
+      TF_IN_AUTOMATION: "true"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.12.2
+
+      - name: Install runner dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq sshpass
+
+      - name: Check runner dependencies
+        run: |
+          for cmd in bash curl jq ssh ssh-keygen sshpass; do
+            command -v "$cmd" >/dev/null 2>&1 || {
+              echo "Missing required command on GitHub-hosted runner: $cmd"
+              exit 1
+            }
+          done
+
+      - name: Write terraform.tfvars
+        run: |
+          test -n "${{ secrets.TFVARS_HCL }}" || {
+            echo "GitHub secret TFVARS_HCL is not set"
+            exit 1
+          }
+          cat > terraform.tfvars <<'EOF'
+          ${{ secrets.TFVARS_HCL }}
+          EOF
+          chmod 600 terraform.tfvars
+
+      - name: Terraform init
+        run: terraform init
+
+      - name: Terraform validate
+        run: terraform validate
+
+      - name: Terraform plan
+        if: ${{ inputs.action == 'plan' || inputs.action == 'apply' || inputs.action == 'destroy' }}
+        run: terraform plan -out=tfplan
+
+      - name: Upload plan artifact
+        if: ${{ inputs.action == 'plan' || inputs.action == 'apply' || inputs.action == 'destroy' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: tfplan
+          path: infra/tfplan
+
+      - name: Terraform apply
+        if: ${{ inputs.action == 'apply' }}
+        run: terraform apply -auto-approve tfplan
+
+      - name: Verify deployment
+        if: ${{ inputs.action == 'apply' || inputs.action == 'verify' }}
+        working-directory: .
+        run: ./infra/script/verify.sh
+
+      - name: Guard destroy confirmation
+        if: ${{ inputs.action == 'destroy' }}
+        run: |
+          test "${{ inputs.confirm_destroy }}" = "destroy" || {
+            echo "Set confirm_destroy=destroy to continue"
+            exit 1
+          }
+
+      - name: Terraform destroy
+        if: ${{ inputs.action == 'destroy' && inputs.confirm_destroy == 'destroy' }}
+        run: terraform destroy -auto-approve

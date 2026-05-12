@@ -1,8 +1,8 @@
-pm_api_url          = "https://proxmox.example.internal:8006/api2/json"
+pm_api_url          = "https://proxmox.cosmin-lab.cloud/api2/json"
 pm_user             = "root@pam"
 pm_api_token_id     = "root@pam!terraform"
 pm_api_token_secret = "REPLACE_ME"
-pm_tls_insecure     = true
+pm_tls_insecure     = false
 
 target_node   = "pve-node-1"
 pool          = "terraform"
@@ -84,4 +84,3 @@ vms = [
     role           = "lb"
   }
 ]
-

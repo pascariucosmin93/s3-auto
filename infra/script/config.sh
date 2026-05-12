@@ -40,8 +40,8 @@ MASTER_DEFAULT_REPL="010"
 VOLUME_DC="dc1"
 
 # ===== Domains  =====
-DOMAIN_STORAGE="storage.example.com"
-DOMAIN_S3="s3.example.com"
+DOMAIN_STORAGE=""
+DOMAIN_S3=""
 
 # NOTE: Inventory is auto-loaded from infra/terraform.tfvars via common.sh.
 # Only use the static list below as a generic fallback if tfvars loading fails.

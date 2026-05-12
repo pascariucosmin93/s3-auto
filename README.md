@@ -77,6 +77,18 @@ The shell layer handles:
 - domain names and DNS settings
 - VM sizing, VM IDs and target node placement
 
+## Proxmox API Endpoint
+
+For GitHub Actions with a public Proxmox endpoint, prefer:
+
+- `pm_api_url = "https://proxmox.cosmin-lab.cloud/api2/json"`
+- `pm_tls_insecure = false`
+
+Use `:8006` only when you are targeting the management port directly, for example from an internal runner:
+
+- `pm_api_url = "https://proxmox.example.internal:8006/api2/json"`
+- `pm_tls_insecure = true` only if that endpoint uses a cert you do not trust
+
 ## Sensitive Data Policy
 
 Do not commit:
@@ -99,7 +111,37 @@ GitHub Actions validates Terraform on every push and pull request:
 - `terraform init -backend=false`
 - `terraform validate`
 
-You can extend it with manual `plan` or `apply` jobs using repository secrets.
+For actual provisioning, use the manual CD workflow in `.github/workflows/deploy.yml`.
+
+### Recommended CI/CD split
+
+- `terraform.yml`: safe CI on GitHub-hosted runners for formatting and validation
+- `deploy.yml`: manual CD on GitHub-hosted runners for `plan`, `apply`, `verify`, `destroy`
+
+### GitHub-hosted runner requirements
+
+- public network access from GitHub Actions to the exact `pm_api_url` used by Terraform
+- public network access from GitHub Actions to the VM subnet if you want `infra/script/verify.sh` and post-clone SSH automation to work
+- if you use the public hostname, set `pm_api_url` to `/api2/json` on `443`, not `:8006`
+- installed commands are handled in the workflow: `jq`, `sshpass`
+
+### Required GitHub secret
+
+- `TFVARS_HCL`: full contents of your real `infra/terraform.tfvars`
+
+This is the simplest reliable setup for this repo because the tfvars include nested VM objects, credentials, DNS settings and post-clone parameters.
+
+If your Proxmox API is only reachable on a private IP, or your chosen `pm_api_url` is not reachable from GitHub Actions, GitHub-hosted `apply` will fail. In that case you need either:
+
+- a self-hosted runner inside your network
+- a VPN/tunnel step inside the workflow before `terraform init/plan/apply`
+
+### Manual workflow actions
+
+- `plan`: runs `terraform plan` and uploads the saved plan
+- `apply`: runs `plan`, then `terraform apply`, then `infra/script/verify.sh`
+- `verify`: runs only `infra/script/verify.sh`
+- `destroy`: runs `plan`, requires `confirm_destroy=destroy`, then destroys resources
 
 ## Portfolio Angle
 
@@ -112,4 +154,3 @@ It shows:
 - DNS and TLS integration
 - post-provision automation
 - practical on-prem object storage design
-

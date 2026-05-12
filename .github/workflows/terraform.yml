@@ -1,4 +1,4 @@
-name: Terraform
+name: Terraform CI
 
 on:
   push:
@@ -10,6 +10,9 @@ on:
 jobs:
   validate:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: infra
 
     steps:
       - uses: actions/checkout@v4
@@ -19,14 +22,10 @@ jobs:
           terraform_version: 1.12.2
 
       - name: Terraform fmt
-        working-directory: infra
         run: terraform fmt -check -recursive
 
       - name: Terraform init
-        working-directory: infra
         run: terraform init -backend=false
 
       - name: Terraform validate
-        working-directory: infra
         run: terraform validate
-
