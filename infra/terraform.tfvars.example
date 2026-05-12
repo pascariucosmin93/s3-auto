@@ -1,24 +1,24 @@
-pm_api_url          = "https://proxmox.cosmin-lab.cloud/api2/json"
-pm_user             = "root@pam"
-pm_api_token_id     = "root@pam!terraform"
+pm_api_url = "https://proxmox.cosmin-lab.cloud/api2/json"
+pm_user = "root@pam"
+pm_api_token_id = "root@pam!terraform"
 pm_api_token_secret = "REPLACE_ME"
-pm_tls_insecure     = false
+pm_tls_insecure = false
 
-target_node   = "pve-node-1"
-pool          = "terraform"
+target_node = "pve-node-1"
+pool = "terraform"
 template_vmid = 1000
 template_name = "ubuntu-base-template"
 
-storage           = "local-lvm"
+storage = "local-lvm"
 cloudinit_storage = "local-lvm"
-bridge            = "vmbr0"
+bridge = "vmbr0"
 
-cidr       = 24
-gateway    = "x.x.x.1"
+cidr = 24
+gateway = "x.x.x.1"
 nameserver = "1.1.1.1"
 
-ci_user       = "devops"
-ci_password   = "REPLACE_ME"
+ci_user = "devops"
+ci_password = "REPLACE_ME"
 ci_user_snippet = ""
 ssh_public_keys = [
   "ssh-ed25519 REPLACE_ME terraform@example"

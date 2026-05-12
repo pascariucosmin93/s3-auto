@@ -1,33 +1,33 @@
-pm_user             = "root@pam"
-pm_tls_insecure     = false
+pm_user = "root@pam"
+pm_tls_insecure = false
 
-target_node         = "pve"
-pool                = "terraform"
-template_vmid       = 1000
-template_name       = "ubuntu-base-template"
+target_node = "pve"
+pool = "terraform"
+template_vmid = 1000
+template_name = "ubuntu-base-template"
 
-storage             = "local-lvm"
-cloudinit_storage   = "local-lvm"
-bridge              = "vmbr0"
+storage = "local-lvm"
+cloudinit_storage = "local-lvm"
+bridge = "vmbr0"
 
-cidr                = 24
-gateway             = "10.10.1.1"
-nameserver          = "1.1.1.1"
+cidr = 24
+gateway = "10.10.1.1"
+nameserver = "1.1.1.1"
 
-ci_user             = "root"
-ci_password         = ""
+ci_user = "root"
+ci_password = ""
 ssh_public_key_file = ""
-ssh_public_keys     = []
+ssh_public_keys = []
 
-cloudflare_zone_id  = ""
-domain_storage      = ""
-domain_s3           = ""
-lb_ip               = ""
-le_email            = ""
-run_certbot         = false
+cloudflare_zone_id = ""
+domain_storage = ""
+domain_s3 = ""
+lb_ip = ""
+le_email = ""
+run_certbot = false
 
-run_post_clone_scripts        = false
-run_haproxy_on_lb_ip_change   = false
+run_post_clone_scripts = false
+run_haproxy_on_lb_ip_change = false
 
 vms = [
   {
