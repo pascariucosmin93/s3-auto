@@ -14,6 +14,7 @@
 **/terraform.tfvars
 **/*.auto.tfvars
 **/*.auto.tfvars.json
+!infra/terraform.auto.tfvars
 
 # Generated artifacts
 scripts/generated/
@@ -25,4 +26,3 @@ infra/script/terraform.tfstate
 *.crt
 id_rsa
 id_rsa.pub
-

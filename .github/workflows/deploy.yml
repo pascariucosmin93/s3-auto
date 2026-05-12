@@ -53,16 +53,26 @@ jobs:
             }
           done
 
-      - name: Write terraform.tfvars
+      - name: Write secrets.auto.tfvars
         run: |
-          test -n "${{ secrets.TFVARS_HCL }}" || {
-            echo "GitHub secret TFVARS_HCL is not set"
+          test -n "${{ secrets.PM_API_URL }}" || {
+            echo "GitHub secret PM_API_URL is not set"
             exit 1
           }
-          cat > terraform.tfvars <<'EOF'
-          ${{ secrets.TFVARS_HCL }}
+          test -n "${{ secrets.PM_API_TOKEN_ID }}" || {
+            echo "GitHub secret PM_API_TOKEN_ID is not set"
+            exit 1
+          }
+          test -n "${{ secrets.PM_API_TOKEN_SECRET }}" || {
+            echo "GitHub secret PM_API_TOKEN_SECRET is not set"
+            exit 1
+          }
+          cat > secrets.auto.tfvars <<'EOF'
+          pm_api_url          = "${{ secrets.PM_API_URL }}"
+          pm_api_token_id     = "${{ secrets.PM_API_TOKEN_ID }}"
+          pm_api_token_secret = "${{ secrets.PM_API_TOKEN_SECRET }}"
           EOF
-          chmod 600 terraform.tfvars
+          chmod 600 secrets.auto.tfvars
 
       - name: Terraform init
         run: terraform init

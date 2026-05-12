@@ -55,7 +55,7 @@ resource "proxmox_vm_qemu" "vms" {
   }
   ciuser     = var.ci_user
   cipassword = var.ci_password
-  sshkeys    = length(var.ssh_public_keys) > 0 ? join("\n", var.ssh_public_keys) : file(var.ssh_public_key_file)
+  sshkeys    = length(var.ssh_public_keys) > 0 ? join("\n", var.ssh_public_keys) : (var.ssh_public_key_file != "" && can(file(var.ssh_public_key_file)) ? file(var.ssh_public_key_file) : null)
   cicustom   = var.ci_user_snippet != "" ? "user=${var.ci_user_snippet}" : null
   nameserver = var.nameserver
   ipconfig0  = "ip=${each.value.ip_address}/${var.cidr},gw=${var.gateway}"

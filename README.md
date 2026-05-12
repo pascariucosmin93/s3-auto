@@ -125,11 +125,13 @@ For actual provisioning, use the manual CD workflow in `.github/workflows/deploy
 - if you use the public hostname, set `pm_api_url` to `/api2/json` on `443`, not `:8006`
 - installed commands are handled in the workflow: `jq`, `sshpass`
 
-### Required GitHub secret
+### Required GitHub secrets
 
-- `TFVARS_HCL`: full contents of your real `infra/terraform.tfvars`
+- `PM_API_URL`
+- `PM_API_TOKEN_ID`
+- `PM_API_TOKEN_SECRET`
 
-This is the simplest reliable setup for this repo because the tfvars include nested VM objects, credentials, DNS settings and post-clone parameters.
+Keep non-sensitive Terraform values in your repo-local `.tfvars` file, and inject only credentials through GitHub Secrets.
 
 If your Proxmox API is only reachable on a private IP, or your chosen `pm_api_url` is not reachable from GitHub Actions, GitHub-hosted `apply` will fail. In that case you need either:
 
