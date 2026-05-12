@@ -2,7 +2,7 @@ pm_user = "root@pam"
 pm_tls_insecure = true
 
 target_node = "pve"
-pool = "terraform"
+pool = ""
 template_vmid = 102
 template_name = "ubuntu-2404-template"
 
@@ -56,56 +56,6 @@ vms = [
     ip_address     = "191.168.1.23"
     cores          = 4
     memory         = 4096
-    os_disk_size   = "32G"
-    data_disk_size = "100G"
-    role           = "volume"
-  },
-  {
-    name           = "node-d4"
-    vmid           = 730
-    ip_address     = "191.168.1.24"
-    cores          = 2
-    memory         = 4096
-    os_disk_size   = "50G"
-    data_disk_size = ""
-    role           = "postgres"
-  },
-  {
-    name           = "node-e5"
-    vmid           = 740
-    ip_address     = "191.168.1.25"
-    cores          = 2
-    memory         = 2048
-    os_disk_size   = "32G"
-    data_disk_size = ""
-    role           = "lb"
-  },
-  {
-    name           = "node-f6"
-    vmid           = 750
-    ip_address     = "191.168.1.26"
-    cores          = 2
-    memory         = 2048
-    os_disk_size   = "32G"
-    data_disk_size = ""
-    role           = "master"
-  },
-  {
-    name           = "node-g7"
-    vmid           = 760
-    ip_address     = "191.168.1.27"
-    cores          = 2
-    memory         = 2048
-    os_disk_size   = "32G"
-    data_disk_size = ""
-    role           = "filer"
-  },
-  {
-    name           = "node-h8"
-    vmid           = 770
-    ip_address     = "191.168.1.28"
-    cores          = 2
-    memory         = 2048
     os_disk_size   = "32G"
     data_disk_size = "100G"
     role           = "volume"

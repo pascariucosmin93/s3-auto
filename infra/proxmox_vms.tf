@@ -13,7 +13,8 @@ resource "proxmox_vm_qemu" "vms" {
   }
   memory   = each.value.memory
   scsihw   = "virtio-scsi-pci"
-  bootdisk = "scsi0"
+  boot     = "order=sata0"
+  bootdisk = "sata0"
   os_type  = "cloud-init"
 
   serial {
@@ -26,7 +27,7 @@ resource "proxmox_vm_qemu" "vms" {
   }
 
   disk {
-    slot    = "scsi0"
+    slot    = "sata0"
     type    = "disk"
     size    = each.value.os_disk_size
     storage = var.storage
@@ -35,7 +36,7 @@ resource "proxmox_vm_qemu" "vms" {
   dynamic "disk" {
     for_each = (each.value.role == "volume" || each.value.data_disk_size != "") ? [1] : []
     content {
-      slot    = "scsi1"
+      slot    = "scsi0"
       type    = "disk"
       size    = each.value.data_disk_size != "" ? each.value.data_disk_size : var.data_disk_size
       storage = var.storage
