@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # ===== Network =====
-NETWORK_PREFIX="192.168.1.1"
+NETWORK_PREFIX="192.168.1"
 CIDR="24"
 GATEWAY="192.168.1.1"
 DNS="1.1.1.1"
