@@ -1,5 +1,5 @@
 pm_user = "root@pam"
-pm_tls_insecure = false
+pm_tls_insecure = true
 
 target_node = "pve"
 pool = "terraform"
