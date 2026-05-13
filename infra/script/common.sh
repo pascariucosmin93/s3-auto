@@ -12,7 +12,16 @@ load_inventory_from_tfvars() {
   command -v python3 >/dev/null 2>&1 || return 0
 
   tf_root="$(cd "$(here)/.." && pwd)"
-  tfvars="${TFVARS_PATH:-${TF_ROOT:-$tf_root}/terraform.tfvars}"
+  if [ -n "${TFVARS_PATH:-}" ]; then
+    tfvars="${TFVARS_PATH}"
+  elif [ -f "${TF_ROOT:-$tf_root}/terraform.tfvars" ]; then
+    tfvars="${TF_ROOT:-$tf_root}/terraform.tfvars"
+  elif [ -f "${TF_ROOT:-$tf_root}/terraform.auto.tfvars" ]; then
+    tfvars="${TF_ROOT:-$tf_root}/terraform.auto.tfvars"
+  else
+    tfvars=""
+  fi
+  [ -n "$tfvars" ] || return 0
   [ -f "$tfvars" ] || return 0
 
   eval "$(python3 - "$tfvars" <<'PY'
@@ -136,6 +145,9 @@ ip_from_octet() {
 build_hosts_block() {
   local cfg="$1"
   if [ "${INVENTORY_LOADED:-}" != "1" ]; then
+    load_inventory_from_tfvars || true
+  fi
+  if [ "${INVENTORY_LOADED:-}" != "1" ]; then
     # shellcheck source=/dev/null
     source "$cfg"
   fi
@@ -201,6 +213,9 @@ wait_for_ssh() {
 
 all_node_ips() {
   if [ "${INVENTORY_LOADED:-}" != "1" ]; then
+    load_inventory_from_tfvars || true
+  fi
+  if [ "${INVENTORY_LOADED:-}" != "1" ]; then
     # shellcheck source=/dev/null
     source "$(here)/config.sh"
   fi
@@ -220,6 +235,9 @@ all_node_ips() {
 }
 
 all_vmids() {
+  if [ "${INVENTORY_LOADED:-}" != "1" ]; then
+    load_inventory_from_tfvars || true
+  fi
   if [ "${INVENTORY_LOADED:-}" != "1" ]; then
     # shellcheck source=/dev/null
     source "$(here)/config.sh"

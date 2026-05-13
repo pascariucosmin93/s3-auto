@@ -6,7 +6,11 @@ source "${SCRIPT_DIR}/common.sh"
 
 MASTER_IP="${NETWORK_PREFIX}.$(echo "${MASTERS[0]}" | awk '{print $3}')"
 FILER_IP="${NETWORK_PREFIX}.$(echo "${FILERS[0]}" | awk '{print $3}')"
-LB_IP="${LB_IP:-${NETWORK_PREFIX}.$(echo "${LB[0]}" | awk '{print $3}')}"
+if [ "${#LB[@]:-0}" -gt 0 ]; then
+  LB_IP="${LB_IP:-${NETWORK_PREFIX}.$(echo "${LB[0]}" | awk '{print $3}')}"
+else
+  LB_IP="${LB_IP:-}"
+fi
 
 echo "==> Master cluster status:"
 curl --connect-timeout 5 --max-time 20 -s "http://${MASTER_IP}:${MASTER_PORT}/cluster/status" | head -c 2000; echo
